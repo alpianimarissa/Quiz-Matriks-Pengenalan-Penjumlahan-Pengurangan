@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Interaktif Matriks - Matematika SMA</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .matrix-cell {
+            transition: all 0.2s ease;
+        }
+        .matrix-cell:hover {
+            transform: scale(1.1);
+            background-color: #e0e7ff;
+            color: #4338ca;
+            font-weight: 700;
+        }
+        .tab-active {
+            background-color: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Navbar Navigasi Cepat -->
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-600 to-accent-500 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                        [M]
+                    </div>
+                    <div>
+                        <span class="font-bold text-slate-900 text-lg tracking-tight block leading-none">Matriks SMA</span>
+                        <span class="text-xs text-slate-500 font-medium">Matematika Wajib Fase F</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-1 bg-slate-100 p-1 rounded-xl text-sm font-medium">
+                    <a href="#tujuan" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-primary-600 hover:bg-white transition">1. Tujuan</a>
+                    <a href="#warmup" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-primary-600 hover:bg-white transition">2. Warm-Up</a>
+                    <a href="#penerapan" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-primary-600 hover:bg-white transition">3. Penerapan</a>
+                    <a href="#materi" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-primary-600 hover:bg-white transition">4. Materi</a>
+                    <a href="#contoh-soal" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-primary-600 hover:bg-white transition">5. Contoh Soal</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="bg-gradient-to-br from-slate-900 via-primary-900 to-slate-900 text-white py-16 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="inline-block py-1 px-3 rounded-full bg-primary-500/20 border border-primary-400/30 text-primary-200 text-xs font-semibold tracking-wider uppercase mb-4">
+                Modul Pembelajaran Interaktif
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
+                Mengenal Matriks & Operasi Dasar Aljabar
+            </h1>
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Pelajari bagaimana sekumpulan data tabel disusun menjadi bentuk matematika yang ringkas, mengenal jenis-jenis matriks, transpos, kesamaan, hingga operasi penjumlahan dan pengurangan.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- BAGIAN 1: TUJUAN PEMBELAJARAN -->
+        <section id="tujuan" class="scroll-mt-24">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-primary-600 text-white font-bold flex items-center justify-center text-sm">01</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Tujuan Pembelajaran</h2>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                <p class="text-slate-600 mb-6">Setelah mempelajari modul interaktif ini, kamu diharapkan mampu untuk:</p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">✓</div>
+                        <p class="text-slate-700 text-sm leading-relaxed">Menjelaskan pengertian matriks, baris, kolom, elemen, serta menentukan ordo suatu matriks dari data tabel.</p>
+                    </div>
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">✓</div>
+                        <p class="text-slate-700 text-sm leading-relaxed">Mengidentifikasi berbagai jenis matriks (baris, kolom, persegi, segitiga, diagonal, identitas, datar, dan tegak).</p>
+                    </div>
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">✓</div>
+                        <p class="text-slate-700 text-sm leading-relaxed">Menentukan transpos dari suatu matriks serta menyelesaikan persamaan aljabar menggunakan konsep kesamaan dua matriks.</p>
+                    </div>
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-sm">✓</div>
+                        <p class="text-slate-700 text-sm leading-relaxed">Melakukan operasi penjumlahan, pengurangan, serta perkalian skalar dengan matriks beserta sifat-sifatnya.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 2: WARM-UP (4 SOAL INTERAKTIF) -->
+        <section id="warmup" class="scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-500 text-white font-bold flex items-center justify-center text-sm">02</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Warm-Up: Pemanasan Otak</h2>
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-800 w-fit">4 Soal Pengantar</span>
+            </div>
+            <p class="text-slate-600 mb-6">Sebelum masuk ke materi utama, yuk uji ketelitianmu membaca data tabel dan aljabar dasar melalui 4 soal singkat berikut!</p>
+
+            <div class="grid md:grid-cols-2 gap-6" id="warmup-container">
+                <!-- Soal 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between" id="q-card-1">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Soal 1 • Membaca Posisi Data</span>
+                        <p class="text-slate-800 font-medium mt-2 mb-4">Perhatikan susunan angka berikut:
+                        $$P = \begin{bmatrix} 4 & -1 & 7 \\ 0 & 9 & -3 \end{bmatrix}$$
+                        Angka berapakah yang terletak pada baris ke-2 dan kolom ke-3?</p>
+                        <div class="space-y-2" id="options-1">
+                            <button onclick="checkWarmup(1, 'A', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">A. $7$</button>
+                            <button onclick="checkWarmup(1, 'B', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">B. $9$</button>
+                            <button onclick="checkWarmup(1, 'C', true)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">C. $-3$</button>
+                            <button onclick="checkWarmup(1, 'D', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">D. $0$</button>
+                        </div>
+                    </div>
+                    <div id="feedback-1" class="hidden mt-4 p-3 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+
+                <!-- Soal 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between" id="q-card-2">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Soal 2 • Ukuran Susunan</span>
+                        <p class="text-slate-800 font-medium mt-2 mb-4">Sebuah tabel rekap nilai memiliki 4 baris nama siswa dan 3 kolom mata pelajaran. Berapa total seluruh sel data nilai di dalam tabel tersebut?</p>
+                        <div class="space-y-2" id="options-2">
+                            <button onclick="checkWarmup(2, 'A', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">A. $7$ data</button>
+                            <button onclick="checkWarmup(2, 'B', true)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">B. $12$ data</button>
+                            <button onclick="checkWarmup(2, 'C', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">C. $16$ data</button>
+                            <button onclick="checkWarmup(2, 'D', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">D. $9$ data</button>
+                        </div>
+                    </div>
+                    <div id="feedback-2" class="hidden mt-4 p-3 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+
+                <!-- Soal 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between" id="q-card-3">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Soal 3 • Aljabar Dasar</span>
+                        <p class="text-slate-800 font-medium mt-2 mb-4">Jika diketahui persamaan $2p - 3 = 5$ dan $p + 3q = 7$, berapakah nilai $q$ yang memenuhi?</p>
+                        <div class="space-y-2" id="options-3">
+                            <button onclick="checkWarmup(3, 'A', true)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">A. $q = 1$</button>
+                            <button onclick="checkWarmup(3, 'B', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">B. $q = 2$</button>
+                            <button onclick="checkWarmup(3, 'C', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">C. $q = 3$</button>
+                            <button onclick="checkWarmup(3, 'D', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">D. $q = 4$</button>
+                        </div>
+                    </div>
+                    <div id="feedback-3" class="hidden mt-4 p-3 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+
+                <!-- Soal 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between" id="q-card-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Soal 4 • Operasi Bilangan Bulat</span>
+                        <p class="text-slate-800 font-medium mt-2 mb-4">Hitunglah hasil dari operasi bilangan bulat berikut dengan teliti:
+                        $$-5 + 4 - (-4) = \dots$$</p>
+                        <div class="space-y-2" id="options-4">
+                            <button onclick="checkWarmup(4, 'A', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">A. $-5$</button>
+                            <button onclick="checkWarmup(4, 'B', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">B. $-13$</button>
+                            <button onclick="checkWarmup(4, 'C', true)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">C. $3$</button>
+                            <button onclick="checkWarmup(4, 'D', false)" class="w-full text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/50 text-sm transition">D. $5$</button>
+                        </div>
+                    </div>
+                    <div id="feedback-4" class="hidden mt-4 p-3 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 3: PENERAPAN NYATA -->
+        <section id="penerapan" class="scroll-mt-24">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center text-sm">03</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Penerapan Matriks di Dunia Nyata</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4">📊</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-2">1. Manajemen Data & Absensi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Pada awalnya, matriks digunakan untuk meringkas penulisan data dari sebuah tabel (seperti tabel ketidakhadiran siswa atau stok barang di beberapa cabang toko) agar lebih cepat diolah secara matematis.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl mb-4">🖼️</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-2">2. Layar Digital & Filter Foto</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Setiap foto digital di ponselmu tersusun atas ribuan piksel dalam bentuk matriks baris dan kolom. Ketika kamu memutar foto $90^\circ$ atau mengubah kecerahan, aplikasi melakukan operasi transpos dan penjumlahan matriks!
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-4">🎮</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-2">3. Grafis Game 3D & Kriptografi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Dalam pembuatan game 3D, pergeseran posisi karakter dan rotasi kamera dihitung menggunakan matriks. Selain itu, pesan rahasia perbankan juga dienkripsi menggunakan kunci matriks.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 4: MATERI LENGKAP -->
+        <section id="materi" class="scroll-mt-24 space-y-10">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-primary-600 text-white font-bold flex items-center justify-center text-sm">04</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Materi Lengkap Matriks</h2>
+            </div>
+
+            <!-- Sub-bab A: Pengertian, Notasi, dan Ordo -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Bagian A</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Pengertian, Notasi, dan Ordo Matriks</h3>
+                </div>
+
+                <p class="text-slate-700 leading-relaxed">
+                    Matriks adalah kelompok bilangan yang disusun dalam suatu jajaran berbentuk persegi atau persegi panjang yang terdiri atas baris-baris dan kolom-kolom, serta diapit oleh tanda kurung siku $[ \dots ]$ atau kurung biasa $( \dots )$.
+                </p>
+
+                <!-- Transformasi Tabel ke Matriks -->
+                <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                    <p class="text-sm font-semibold text-slate-800 mb-3">Ilustrasi: Mengubah Tabel Ketidakhadiran Siswa Menjadi Matriks</p>
+                    <div class="grid md:grid-cols-11 gap-4 items-center">
+                        <div class="md:col-span-5 overflow-x-auto">
+                            <table class="w-full text-sm text-center border-collapse bg-white rounded-lg overflow-hidden shadow-xs">
+                                <thead class="bg-primary-600 text-white">
+                                    <tr>
+                                        <th class="py-2 px-3 border border-primary-500">Nama</th>
+                                        <th class="py-2 px-3 border border-primary-500">Senin</th>
+                                        <th class="py-2 px-3 border border-primary-500">Selasa</th>
+                                        <th class="py-2 px-3 border border-primary-500">Rabu</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-slate-700">
+                                    <tr>
+                                        <td class="py-2 px-3 border border-slate-200 font-medium text-left">Amir</td>
+                                        <td class="py-2 px-3 border border-slate-200">3</td>
+                                        <td class="py-2 px-3 border border-slate-200">2</td>
+                                        <td class="py-2 px-3 border border-slate-200">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 border border-slate-200 font-medium text-left">Budi</td>
+                                        <td class="py-2 px-3 border border-slate-200">2</td>
+                                        <td class="py-2 px-3 border border-slate-200">0</td>
+                                        <td class="py-2 px-3 border border-slate-200">5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-3 border border-slate-200 font-medium text-left">Wati</td>
+                                        <td class="py-2 px-3 border border-slate-200">2</td>
+                                        <td class="py-2 px-3 border border-slate-200">1</td>
+                                        <td class="py-2 px-3 border border-slate-200">1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="md:col-span-1 text-center font-bold text-primary-600 text-xl">
+                            $\longrightarrow$
+                        </div>
+                        <div class="md:col-span-5 bg-white p-4 rounded-xl border border-slate-200 text-center">
+                            <p class="text-xs text-slate-500 mb-1">Bentuk Matriks $A$:</p>
+                            $$A = \begin{bmatrix} 3 & 2 & 1 \\ 2 & 0 & 5 \\ 2 & 1 & 1 \end{bmatrix}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bentuk Umum & Eksplorasi Elemen Interaktif -->
+                <div class="grid md:grid-cols-2 gap-6 items-center pt-2">
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-slate-900">Bentuk Umum & Ordo Matriks</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Nama matriks ditulis menggunakan huruf kapital (misal $A, B, C$), sedangkan elemen-elemennya ditulis dengan huruf kecil berindeks $a_{ij}$ yang artinya elemen pada baris ke-$i$ dan kolom ke-$j$.
+                        </p>
+                        <ul class="text-sm text-slate-700 space-y-2 list-disc pl-5">
+                            <li>Baris adalah susunan elemen yang mendatar (horizontal).</li>
+                            <li>Kolom adalah susunan elemen yang tegak (vertikal).</li>
+                            <li>Ordo (ukuran) matriks $A$ dengan $m$ baris dan $n$ kolom ditulis $A_{m \times n}$.</li>
+                        </ul>
+                        <div class="bg-primary-50/70 p-3 rounded-xl border border-primary-100 text-xs text-primary-900">
+                            Coba arahkan kursor atau klik pada elemen matriks di samping untuk melihat posisi baris dan kolomnya!
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-inner">
+                        <div class="text-center text-xs text-slate-400 mb-3">Eksplorasi Indeks Elemen Matriks $A_{3 \times 4}$</div>
+                        <div class="grid grid-cols-4 gap-2 max-w-xs mx-auto font-mono text-sm">
+                            <button onclick="showElementInfo(1,1, 'Baris 1, Kolom 1')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{11}$</button>
+                            <button onclick="showElementInfo(1,2, 'Baris 1, Kolom 2')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{12}$</button>
+                            <button onclick="showElementInfo(1,3, 'Baris 1, Kolom 3')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{13}$</button>
+                            <button onclick="showElementInfo(1,4, 'Baris 1, Kolom 4')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{14}$</button>
+                            
+                            <button onclick="showElementInfo(2,1, 'Baris 2, Kolom 1')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{21}$</button>
+                            <button onclick="showElementInfo(2,2, 'Baris 2, Kolom 2')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{22}$</button>
+                            <button onclick="showElementInfo(2,3, 'Baris 2, Kolom 3')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{23}$</button>
+                            <button onclick="showElementInfo(2,4, 'Baris 2, Kolom 4')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{24}$</button>
+                            
+                            <button onclick="showElementInfo(3,1, 'Baris 3, Kolom 1')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{31}$</button>
+                            <button onclick="showElementInfo(3,2, 'Baris 3, Kolom 2')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{32}$</button>
+                            <button onclick="showElementInfo(3,3, 'Baris 3, Kolom 3')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{33}$</button>
+                            <button onclick="showElementInfo(3,4, 'Baris 3, Kolom 4')" class="matrix-cell py-2.5 rounded-lg bg-slate-800 border border-slate-700">$a_{34}$</button>
+                        </div>
+                        <div id="element-inspector" class="mt-4 text-center text-xs font-medium text-sky-300 bg-slate-800/80 py-2 px-3 rounded-lg">
+                            Klik salah satu elemen di atas untuk melihat keterangannya.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-bab B: 7 Jenis-Jenis Matriks -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Bagian B</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Jenis-Jenis Matriks</h3>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-5">
+                    <!-- 1. Matriks Baris -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
+                        <h4 class="font-bold text-slate-900 mb-1">1. Matriks Baris</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks yang hanya terdiri dari satu baris saja (berordo $1 \times n$).</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-sm text-center">
+                            $A = \begin{bmatrix} 3 & 5 & -4 & 0 \end{bmatrix}$ (ordo $1 \times 4$)<br>
+                            $B = \begin{bmatrix} 0 & 1 & 3 \end{bmatrix}$ (ordo $1 \times 3$)
+                        </div>
+                    </div>
+
+                    <!-- 2. Matriks Kolom -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
+                        <h4 class="font-bold text-slate-900 mb-1">2. Matriks Kolom</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks yang hanya terdiri dari satu kolom saja (berordo $m \times 1$).</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-sm text-center">
+                            $B = \begin{bmatrix} 2 \\ 1 \\ -3 \end{bmatrix}$ (berordo $3 \times 1$)
+                        </div>
+                    </div>
+
+                    <!-- 3. Matriks Persegi -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 md:col-span-2">
+                        <h4 class="font-bold text-slate-900 mb-1">3. Matriks Persegi</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks yang banyaknya baris sama dengan banyaknya kolom (berordo $n \times n$, atau disebut matriks berordo $n$).</p>
+                        <div class="grid md:grid-cols-2 gap-4 items-center bg-white p-4 rounded-lg border border-slate-200">
+                            <div class="text-center">
+                                $$A = \begin{bmatrix} 2 & 0 & 4 \\ 1 & -1 & 3 \\ 0 & 4 & 6 \end{bmatrix}$$
+                                <span class="text-xs text-slate-500">Matriks berordo $3 \times 3$ (ordo 3)</span>
+                            </div>
+                            <div class="text-sm text-slate-700 space-y-2">
+                                <p><span class="font-semibold text-primary-700">Diagonal Utama:</span> Elemen yang terletak pada garis hubung dari kiri atas ($a_{11}$) ke kanan bawah ($a_{nn}$). Pada matriks $A$, elemennya adalah $2, -1, 6$.</p>
+                                <p><span class="font-semibold text-sky-700">Diagonal Samping:</span> Elemen yang terletak pada garis hubung dari kanan atas ($a_{1n}$) ke kiri bawah ($a_{n1}$). Pada matriks $A$, elemennya adalah $4, -1, 0$.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Matriks Segitiga -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 md:col-span-2">
+                        <h4 class="font-bold text-slate-900 mb-1">4. Matriks Segitiga (Segitiga Atas & Segitiga Bawah)</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks persegi yang elemen-elemen di salah satu sisi diagonal utamanya semuanya bernilai nol.</p>
+                        <div class="grid sm:grid-cols-2 gap-4 bg-white p-4 rounded-lg border border-slate-200 text-center">
+                            <div>
+                                $$A = \begin{bmatrix} 6 & 0 & 0 \\ 1 & -2 & 0 \\ 0 & 7 & 6 \end{bmatrix}$$
+                                <p class="text-xs text-slate-600 mt-1">Elemen di atas diagonal utama bernilai $0$</p>
+                            </div>
+                            <div>
+                                $$B = \begin{bmatrix} 3 & 5 & 1 \\ 0 & 2 & -3 \\ 0 & 0 & 6 \end{bmatrix}$$
+                                <p class="text-xs text-slate-600 mt-1">Elemen di bawah diagonal utama bernilai $0$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Matriks Diagonal -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
+                        <h4 class="font-bold text-slate-900 mb-1">5. Matriks Diagonal</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks persegi yang semua elemennya bernilai nol, kecuali elemen pada diagonal utama.</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                            $$A = \begin{bmatrix} 5 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 3 \end{bmatrix}$$
+                        </div>
+                    </div>
+
+                    <!-- 6. Matriks Identitas -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50">
+                        <h4 class="font-bold text-slate-900 mb-1">6. Matriks Identitas ($I$)</h4>
+                        <p class="text-sm text-slate-600 mb-3">Matriks diagonal yang semua elemen pada diagonal utamanya bernilai $1$.</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 text-center">
+                            $$I = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+                        </div>
+                    </div>
+
+                    <!-- 7. Matriks Datar & Tegak -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/50 md:col-span-2">
+                        <h4 class="font-bold text-slate-900 mb-1">7. Matriks Datar & Matriks Tegak</h4>
+                        <p class="text-sm text-slate-600 mb-3">Perbandingan antara banyaknya baris dan kolom menentukan bentuk persegi panjangnya.</p>
+                        <div class="grid sm:grid-cols-2 gap-4 bg-white p-4 rounded-lg border border-slate-200 text-center">
+                            <div>
+                                $$A = \begin{bmatrix} 1 & 0 & -2 \\ 3 & 4 & 1 \end{bmatrix}$$
+                                <p class="text-xs text-slate-600 mt-1">Bentuk mendatar (ordo $2 \times 3$)</p>
+                            </div>
+                            <div>
+                                $$B = \begin{bmatrix} 2 & 0 \\ 2 & 6 \\ 3 & 1 \end{bmatrix}$$
+                                <p class="text-xs text-slate-600 mt-1">Bentuk tegak (ordo $3 \times 2$)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-bab C: Transpos dan Kesamaan Dua Matriks -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Bagian C</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Transpos Matriks & Kesamaan Dua Matriks</h3>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Transpos -->
+                    <div class="p-5 rounded-xl bg-indigo-50/50 border border-indigo-100 space-y-3">
+                        <h4 class="font-bold text-indigo-950 text-lg">1. Transpos Matriks ($A^t$ atau $A^T$)</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Transpos dari matriks $A_{m \times n}$ adalah matriks baru $A^t$ berordo $n \times m$ yang diperoleh dengan cara menukar elemen baris menjadi kolom, atau sebaliknya.
+                        </p>
+                        <div class="bg-white p-4 rounded-xl border border-indigo-100 text-center">
+                            $$A = \begin{bmatrix} 2 & 0 \\ 2 & 6 \\ 3 & 1 \end{bmatrix} \implies A^t = \begin{bmatrix} 2 & 2 & 3 \\ 0 & 6 & 1 \end{bmatrix}$$
+                        </div>
+                        <p class="text-xs text-indigo-900 bg-indigo-100/70 p-2.5 rounded-lg">
+                            Catatan: Jika suatu matriks persegi sama dengan transposnya ($A = A^t$), maka matriks tersebut disebut matriks simetris (setangkup).
+                        </p>
+                    </div>
+
+                    <!-- Kesamaan Dua Matriks -->
+                    <div class="p-5 rounded-xl bg-emerald-50/50 border border-emerald-100 space-y-3">
+                        <h4 class="font-bold text-emerald-950 text-lg">2. Kesamaan Dua Matriks ($A = B$)</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            Dua matriks $A$ dan $B$ dikatakan sama ($A = B$) jika dan hanya jika memenuhi dua syarat:
+                        </p>
+                        <ol class="text-sm text-slate-700 list-decimal pl-5 space-y-1">
+                            <li>Ordo kedua matriks sama.</li>
+                            <li>Semua elemen yang seletak nilainya sama.</li>
+                        </ol>
+                        <div class="bg-white p-3 rounded-xl border border-emerald-100 text-xs text-center space-y-2">
+                            <div>
+                                $A = \begin{bmatrix} 2 & 0 \\ -3 & 9 \end{bmatrix}, \quad B = \begin{bmatrix} -3 & 9 \\ 0 & 2 \end{bmatrix}, \quad C = \begin{bmatrix} 6/3 & 0 \\ 5-8 & 3^2 \end{bmatrix}$
+                            </div>
+                            <p class="text-slate-600 text-left">
+                                • $A \neq B$ karena elemen yang seletak tidak sama.<br>
+                                • $A = C$ karena ordonya sama ($2 \times 2$) dan elemen seletak nilainya sama ($6/3 = 2$, $5-8 = -3$, $3^2 = 9$).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub-bab D: Operasi Penjumlahan, Pengurangan, & Perkalian Skalar -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-primary-600">Bagian D</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">Penjumlahan, Pengurangan, dan Perkalian Skalar</h3>
+                </div>
+
+                <!-- Syarat Penjumlahan & Pengurangan -->
+                <div class="space-y-4">
+                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-sm">
+                        Syarat Utama: Dua matriks dapat dijumlahkan atau dikurangkan jika dan hanya jika kedua matriks tersebut memiliki ordo yang sama. Caranya adalah dengan menjumlahkan atau mengurangkan elemen-elemen yang seletak.
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center overflow-x-auto">
+                        <p class="text-xs text-slate-500 mb-2">Contoh Penjumlahan Matriks Berordo $3 \times 2$:</p>
+                        $$\begin{bmatrix} 2 & 0 \\ -2 & 6 \\ 3 & 1 \end{bmatrix} + \begin{bmatrix} 3 & 4 \\ 5 & 6 \\ -3 & -2 \end{bmatrix} = \begin{bmatrix} 2+3 & 0+4 \\ -2+5 & 6+6 \\ 3+(-3) & 1+(-2) \end{bmatrix} = \begin{bmatrix} 5 & 4 \\ 3 & 12 \\ 0 & -1 \end{bmatrix}$$
+                    </div>
+                </div>
+
+                <!-- Matriks Nol, Matriks Lawan, dan Perkalian Skalar -->
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Matriks Nol ($O$)</h4>
+                        <p class="text-xs text-slate-600 mb-3">Matriks yang semua elemennya nol. Merupakan identitas penjumlahan: $A + O = O + A = A$.</p>
+                        <div class="bg-slate-50 p-2 rounded text-center text-xs">
+                            $$O = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$$
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Matriks Lawan ($-A$)</h4>
+                        <p class="text-xs text-slate-600 mb-3">Matriks yang elemennya merupakan lawan tanda dari matriks $A$. Berlaku $A + (-A) = O$.</p>
+                        <div class="bg-slate-50 p-2 rounded text-center text-xs">
+                            $A = \begin{bmatrix} 3 & 4 \\ -5 & 0 \end{bmatrix} \implies -A = \begin{bmatrix} -3 & -4 \\ 5 & 0 \end{bmatrix}$
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Perkalian Skalar ($kA$)</h4>
+                        <p class="text-xs text-slate-600 mb-3">Mengalikan bilangan real $k$ dengan setiap elemen yang ada di dalam matriks $A$.</p>
+                        <div class="bg-slate-50 p-2 rounded text-center text-xs">
+                            $2 \begin{bmatrix} 3 & 4 \\ -5 & 0 \end{bmatrix} = \begin{bmatrix} 6 & 8 \\ -10 & 0 \end{bmatrix}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sifat-sifat Operasi -->
+                <div class="bg-slate-900 text-white p-5 rounded-xl">
+                    <h4 class="font-bold text-sm text-primary-300 mb-3">Sifat-Sifat Penjumlahan & Perkalian Skalar Matriks (Ordo Sama)</h4>
+                    <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                        <div class="bg-slate-800 p-3 rounded-lg">1. Sifat Komutatif: $A + B = B + A$</div>
+                        <div class="bg-slate-800 p-3 rounded-lg">2. Sifat Asosiatif: $(A + B) + C = A + (B + C)$</div>
+                        <div class="bg-slate-800 p-3 rounded-lg">3. Distributif Skalar: $k(A + B) = kA + kB$</div>
+                        <div class="bg-slate-800 p-3 rounded-lg">4. Distributif Penjumlahan: $(k + m)A = kA + mA$</div>
+                    </div>
+                </div>
+
+                <!-- Mini Kalkulator Matriks 2x2 Interaktif -->
+                <div class="bg-gradient-to-r from-primary-50 to-sky-50 p-6 rounded-2xl border border-primary-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div>
+                            <h4 class="font-bold text-slate-900">Laboratorium Mini: Kalkulator Matriks $2 \times 2$</h4>
+                            <p class="text-xs text-slate-600">Ubah angka pada matriks $A$ dan $B$ di bawah ini untuk melihat hasil penjumlahan dan pengurangan secara otomatis.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <!-- Matriks A -->
+                        <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200">
+                            <div class="text-xs font-bold text-center text-primary-600 mb-2">Matriks $A$</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="a11" value="2" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="a12" value="-5" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="a21" value="3" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="a22" value="-1" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Operator Selector -->
+                        <div>
+                            <select id="op-select" onchange="calcMatrix()" class="px-3 py-2 rounded-xl border border-primary-300 bg-white font-bold text-primary-700 text-lg shadow-xs">
+                                <option value="+">+</option>
+                                <option value="-">−</option>
+                            </select>
+                        </div>
+
+                        <!-- Matriks B -->
+                        <div class="bg-white p-3 rounded-xl shadow-xs border border-slate-200">
+                            <div class="text-xs font-bold text-center text-sky-600 mb-2">Matriks $B$</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="b11" value="0" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="b12" value="4" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="b21" value="-2" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                                <input type="number" id="b22" value="-6" oninput="calcMatrix()" class="w-14 text-center py-1.5 border border-slate-300 rounded-lg font-mono text-sm">
+                            </div>
+                        </div>
+
+                        <div class="font-bold text-xl text-slate-400">=</div>
+
+                        <!-- Hasil -->
+                        <div class="bg-slate-900 text-white p-3 rounded-xl shadow-sm">
+                            <div class="text-xs font-bold text-center text-emerald-400 mb-2" id="res-label">Hasil $A + B$</div>
+                            <div class="grid grid-cols-2 gap-2 font-mono text-sm text-center">
+                                <div id="r11" class="w-14 py-1.5 bg-slate-800 rounded-lg font-bold text-emerald-300">2</div>
+                                <div id="r12" class="w-14 py-1.5 bg-slate-800 rounded-lg font-bold text-emerald-300">-1</div>
+                                <div id="r21" class="w-14 py-1.5 bg-slate-800 rounded-lg font-bold text-emerald-300">1</div>
+                                <div id="r22" class="w-14 py-1.5 bg-slate-800 rounded-lg font-bold text-emerald-300">-7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 5: CONTOH SOAL & PEMBAHASAN LENGKAP -->
+        <section id="contoh-soal" class="scroll-mt-24">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center text-sm">05</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Contoh Soal & Pembahasan Lengkap</h2>
+            </div>
+
+            <!-- Filter Tab Kategori Soal -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="switchExampleTab('tab-konsep')" id="btn-tab-konsep" class="tab-active px-4 py-2 rounded-xl text-sm font-semibold transition">
+                    Bagian 1: Konsep, Transpos & Kesamaan (4 Soal)
+                </button>
+                <button onclick="switchExampleTab('tab-operasi')" id="btn-tab-operasi" class="bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-semibold transition">
+                    Bagian 2: Penjumlahan, Pengurangan & Persamaan Matriks (4 Soal)
+                </button>
+            </div>
+
+            <!-- TAB 1: CONTOH SOAL KONSEP DASAR -->
+            <div id="tab-konsep" class="space-y-5">
+                <!-- Contoh 1.1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-primary-50 text-primary-700 text-xs font-bold mb-2">Contoh Soal 1.1</span>
+                            <p class="text-slate-800 font-medium">
+                                Diketahui matriks $A = \begin{bmatrix} 2 & 3 & 1 \\ 4 & 0 & -3 \end{bmatrix}$.<br>
+                                (a) Tentukanlah ordo matriks $A$<br>
+                                (b) Sebutkan unsur-unsur matriks baris ke-1<br>
+                                (c) Sebutkan unsur-unsur matriks kolom ke-2
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-1-1')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-primary-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-1-1" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-2 bg-slate-50/70 p-4 rounded-xl">
+                        <p class="font-bold text-primary-700">Penyelesaian:</p>
+                        <p>(a) Matriks $A$ memiliki $2$ baris dan $3$ kolom, sehingga matriks $A$ berordo $(2 \times 3)$.</p>
+                        <p>(b) Unsur-unsur matriks baris ke-1 (mendatar paling atas) adalah $2, 3,$ dan $1$.</p>
+                        <p>(c) Unsur-unsur matriks kolom ke-2 (tegak di tengah) adalah $3$ dan $0$.</p>
+                    </div>
+                </div>
+
+                <!-- Contoh 1.2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-primary-50 text-primary-700 text-xs font-bold mb-2">Contoh Soal 1.2</span>
+                            <p class="text-slate-800 font-medium">
+                                Tentukanlah transpos dari matriks $A = \begin{bmatrix} 3 & 0 & -1 \\ 2 & 4 & 2 \\ 1 & -3 & 4 \end{bmatrix}$.
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-1-2')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-primary-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-1-2" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-2 bg-slate-50/70 p-4 rounded-xl">
+                        <p class="font-bold text-primary-700">Penyelesaian:</p>
+                        <p>Ubah setiap baris matriks $A$ menjadi kolom secara berurutan:</p>
+                        $$A^t = \begin{bmatrix} 3 & 2 & 1 \\ 0 & 4 & -3 \\ -1 & 2 & 4 \end{bmatrix}$$
+                    </div>
+                </div>
+
+                <!-- Contoh 1.3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-primary-50 text-primary-700 text-xs font-bold mb-2">Contoh Soal 1.3</span>
+                            <p class="text-slate-800 font-medium">
+                                Diketahui matriks $A = \begin{bmatrix} r & 7 \\ 2p-3 & 2r \end{bmatrix}$ dan $B = \begin{bmatrix} 2q & p+3q \\ 5 & 2r \end{bmatrix}$. Jika $A = B$, tentukanlah nilai $r$.
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-1-3')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-primary-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-1-3" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-2 bg-slate-50/70 p-4 rounded-xl">
+                        <p class="font-bold text-primary-700">Penyelesaian:</p>
+                        <p>Karena $A = B$, maka elemen-elemen yang seletak bernilai sama:</p>
+                        $$\begin{bmatrix} r & 7 \\ 2p-3 & 2r \end{bmatrix} = \begin{bmatrix} 2q & p+3q \\ 5 & 2r \end{bmatrix}$$
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Dari elemen baris 2 kolom 1: $2p - 3 = 5 \implies 2p = 8 \implies p = 4$.</li>
+                            <li>Dari elemen baris 1 kolom 2: $7 = p + 3q \implies 7 = 4 + 3q \implies 3q = 3 \implies q = 1$.</li>
+                            <li>Dari elemen baris 1 kolom 1: $r = 2q \implies r = 2(1) = 2$.</li>
+                        </ul>
+                        <p class="font-semibold text-slate-900 pt-1">Jadi, nilai $r = 2$.</p>
+                    </div>
+                </div>
+
+                <!-- Contoh 1.4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-primary-50 text-primary-700 text-xs font-bold mb-2">Contoh Soal 1.4</span>
+                            <p class="text-slate-800 font-medium">
+                                Diketahui matriks $A = \begin{bmatrix} 5 & -2 & b \\ 1 & 4 & d \\ 0 & 2b & 6c \end{bmatrix}$ dan $B = \begin{bmatrix} 5 & 1 & 0 \\ -2 & 4 & 6 \\ 3c & d & 4d \end{bmatrix}$. Jika $A = B^t$, tentukanlah elemen matriks $A$ pada baris ke-2 kolom ke-3!
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-1-4')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-primary-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-1-4" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-2 bg-slate-50/70 p-4 rounded-xl">
+                        <p class="font-bold text-primary-700">Penyelesaian:</p>
+                        <p>Langkah pertama, tentukan transpos dari matriks $B$ ($B^t$), lalu samakan dengan $A$:</p>
+                        $$\begin{bmatrix} 5 & -2 & b \\ 1 & 4 & d \\ 0 & 2b & 6c \end{bmatrix} = \begin{bmatrix} 5 & -2 & 3c \\ 1 & 4 & d \\ 0 & 6 & 4d \end{bmatrix}$$
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Dari elemen baris 3 kolom 2: $2b = 6 \implies b = 3$.</li>
+                            <li>Dari elemen baris 1 kolom 3: $b = 3c \implies 3 = 3c \implies c = 1$.</li>
+                            <li>Dari elemen baris 3 kolom 3: $6c = 4d \implies 6(1) = 4d \implies d = \frac{6}{4} = \frac{3}{2}$.</li>
+                        </ul>
+                        <p class="font-semibold text-slate-900 pt-1">Elemen matriks $A$ baris ke-2 kolom ke-3 adalah $d$, sehingga nilainya adalah $\frac{3}{2}$.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: CONTOH SOAL OPERASI MATRIKS -->
+            <div id="tab-operasi" class="hidden space-y-5">
+                <!-- Contoh 2.1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">Contoh Soal 2.1</span>
+                            <p class="text-slate-800 font-medium">
+                                Diketahui matriks $A = \begin{bmatrix} 2 & -5 \\ 3 & -1 \end{bmatrix}$, $B = \begin{bmatrix} 0 & 4 \\ -2 & -6 \end{bmatrix}$, dan $C = \begin{bmatrix} -3 & 4 \\ 2 & -2 \end{bmatrix}$. Tentukanlah hasil dari:<br>
+                                (a) $A + B - C$<br>
+                                (b) $A - (B + C)$<br>
+                                (c) $(A - B) - (A - C) + (B + C)$
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-2-1')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-2-1" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-3 bg-slate-50/70 p-4 rounded-xl overflow-x-auto">
+                        <p class="font-bold text-emerald-700">Penyelesaian:</p>
+                        <div>
+                            <p class="font-semibold">(a) $A + B - C$:</p>
+                            $$= \begin{bmatrix} 2 & -5 \\ 3 & -1 \end{bmatrix} + \begin{bmatrix} 0 & 4 \\ -2 & -6 \end{bmatrix} - \begin{bmatrix} -3 & 4 \\ 2 & -2 \end{bmatrix} = \begin{bmatrix} 2+0-(-3) & -5+4-4 \\ 3+(-2)-2 & -1+(-6)-(-2) \end{bmatrix} = \begin{bmatrix} 5 & -5 \\ -1 & -5 \end{bmatrix}$$
+                            <p class="text-xs text-slate-500 mt-1">Catatan ketelitian: Pada baris 2 kolom 2, $-1 + (-6) - (-2) = -7 + 2 = -5$.</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">(b) $A - (B + C)$:</p>
+                            $$= \begin{bmatrix} 2 & -5 \\ 3 & -1 \end{bmatrix} - \left( \begin{bmatrix} 0 & 4 \\ -2 & -6 \end{bmatrix} + \begin{bmatrix} -3 & 4 \\ 2 & -2 \end{bmatrix} \right) = \begin{bmatrix} 2 & -5 \\ 3 & -1 \end{bmatrix} - \begin{bmatrix} -3 & 8 \\ 0 & -8 \end{bmatrix} = \begin{bmatrix} 5 & -13 \\ 3 & 7 \end{bmatrix}$$
+                        </div>
+                        <div>
+                            <p class="font-semibold">(c) Sederhanakan bentuk aljabarnya terlebih dahulu:</p>
+                            $$(A - B) - (A - C) + (B + C) = A - B - A + C + B + C = 2C = 2 \begin{bmatrix} -3 & 4 \\ 2 & -2 \end{bmatrix} = \begin{bmatrix} -6 & 8 \\ 4 & -4 \end{bmatrix}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh 2.2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">Contoh Soal 2.2</span>
+                            <p class="text-slate-800 font-medium">
+                                Tentukan hasil operasi skalar matriks berikut:<br>
+                                (a) $4 \begin{bmatrix} 2 & 1 \\ -3 & 0 \end{bmatrix} + \frac{1}{2} \begin{bmatrix} 4 & -2 \\ 0 & 8 \end{bmatrix} - 2 \begin{bmatrix} -2 & 3 \\ 0 & -1 \end{bmatrix}$<br>
+                                (b) $3 \begin{bmatrix} -5 & 2 \\ 1 & 0 \end{bmatrix} - \begin{bmatrix} -6 & 1 \\ 2 & -3 \end{bmatrix} - 2 \begin{bmatrix} 1 & -1 \\ 4 & -3 \end{bmatrix}$
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-2-2')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-2-2" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-3 bg-slate-50/70 p-4 rounded-xl overflow-x-auto">
+                        <p class="font-bold text-emerald-700">Penyelesaian:</p>
+                        <div>
+                            <p class="font-semibold">(a) Kalikan skalar ke dalam setiap elemen terlebih dahulu:</p>
+                            $$= \begin{bmatrix} 8 & 4 \\ -12 & 0 \end{bmatrix} + \begin{bmatrix} 2 & -1 \\ 0 & 4 \end{bmatrix} - \begin{bmatrix} -4 & 6 \\ 0 & -2 \end{bmatrix} = \begin{bmatrix} 8+2-(-4) & 4+(-1)-6 \\ -12+0-0 & 0+4-(-2) \end{bmatrix} = \begin{bmatrix} 14 & -3 \\ -12 & 6 \end{bmatrix}$$
+                        </div>
+                        <div>
+                            <p class="font-semibold">(b) Kalikan skalar $3$ dan $2$ ke dalam matriks masing-masing:</p>
+                            $$= \begin{bmatrix} -15 & 6 \\ 3 & 0 \end{bmatrix} - \begin{bmatrix} -6 & 1 \\ 2 & -3 \end{bmatrix} - \begin{bmatrix} 2 & -2 \\ 8 & -6 \end{bmatrix} = \begin{bmatrix} -15-(-6)-2 & 6-1-(-2) \\ 3-2-8 & 0-(-3)-(-6) \end{bmatrix} = \begin{bmatrix} -11 & 7 \\ -7 & 9 \end{bmatrix}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh 2.3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">Contoh Soal 2.3</span>
+                            <p class="text-slate-800 font-medium">
+                                Tentukanlah matriks $X$ jika:<br>
+                                (a) $3X - 2 \begin{bmatrix} 3 & -2 \\ 6 & 1 \end{bmatrix} = \frac{1}{2} \begin{bmatrix} 6 & 20 \\ -12 & 2 \end{bmatrix}$<br>
+                                (b) $4X + 2 \begin{bmatrix} 3 & 0 & -5 \\ -2 & -4 & 1 \end{bmatrix} - 3 \begin{bmatrix} 4 & -2 & 3 \\ 0 & 1 & 2 \end{bmatrix} = \begin{bmatrix} 4 & 6 & 1 \\ -2 & 3 & 0 \end{bmatrix} + 2X$
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-2-3')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-2-3" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-3 bg-slate-50/70 p-4 rounded-xl overflow-x-auto">
+                        <p class="font-bold text-emerald-700">Penyelesaian:</p>
+                        <div>
+                            <p class="font-semibold">(a) Pindahkan konstanta matriks ke ruas kanan:</p>
+                            $$3X - \begin{bmatrix} 6 & -4 \\ 12 & 2 \end{bmatrix} = \begin{bmatrix} 3 & 10 \\ -6 & 1 \end{bmatrix}$$
+                            $$3X = \begin{bmatrix} 3 & 10 \\ -6 & 1 \end{bmatrix} + \begin{bmatrix} 6 & -4 \\ 12 & 2 \end{bmatrix} = \begin{bmatrix} 9 & 6 \\ 6 & 3 \end{bmatrix}$$
+                            $$X = \frac{1}{3} \begin{bmatrix} 9 & 6 \\ 6 & 3 \end{bmatrix} = \begin{bmatrix} 3 & 2 \\ 2 & 1 \end{bmatrix}$$
+                        </div>
+                        <div>
+                            <p class="font-semibold">(b) Kelompokkan suku yang memuat $X$ di ruas kiri:</p>
+                            $$4X + \begin{bmatrix} 6 & 0 & -10 \\ -4 & -8 & 2 \end{bmatrix} - \begin{bmatrix} 12 & -6 & 9 \\ 0 & 3 & 6 \end{bmatrix} = \begin{bmatrix} 4 & 6 & 1 \\ -2 & 3 & 0 \end{bmatrix} + 2X$$
+                            $$4X + \begin{bmatrix} -6 & 6 & -19 \\ -4 & -11 & -4 \end{bmatrix} = \begin{bmatrix} 4 & 6 & 1 \\ -2 & 3 & 0 \end{bmatrix} + 2X$$
+                            $$4X - 2X = \begin{bmatrix} 4 & 6 & 1 \\ -2 & 3 & 0 \end{bmatrix} - \begin{bmatrix} -6 & 6 & -19 \\ -4 & -11 & -4 \end{bmatrix}$$
+                            $$2X = \begin{bmatrix} 10 & 0 & 20 \\ 2 & 14 & 4 \end{bmatrix} \implies X = \frac{1}{2} \begin{bmatrix} 10 & 0 & 20 \\ 2 & 14 & 4 \end{bmatrix} = \begin{bmatrix} 5 & 0 & 10 \\ 1 & 7 & 2 \end{bmatrix}$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh 2.4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold mb-2">Contoh Soal 2.4</span>
+                            <p class="text-slate-800 font-medium">
+                                Tentukanlah nilai $x, y,$ dan $z$ jika diketahui persamaan matriks:
+                                $$\begin{bmatrix} x & 4 \\ 3x & 6 \end{bmatrix} + \frac{1}{2} \begin{bmatrix} 6y & 10 \\ 4 & 2z \end{bmatrix} = \begin{bmatrix} 3+4x & 9 \\ 8 & 2y \end{bmatrix}$$
+                            </p>
+                        </div>
+                        <button onclick="toggleSolution('sol-2-4')" class="shrink-0 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold transition">
+                            Lihat Pembahasan
+                        </button>
+                    </div>
+                    <div id="sol-2-4" class="hidden mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 space-y-2 bg-slate-50/70 p-4 rounded-xl overflow-x-auto">
+                        <p class="font-bold text-emerald-700">Penyelesaian:</p>
+                        <p>Operasikan penjumlahan pada ruas kiri terlebih dahulu:</p>
+                        $$\begin{bmatrix} x & 4 \\ 3x & 6 \end{bmatrix} + \begin{bmatrix} 3y & 5 \\ 2 & z \end{bmatrix} = \begin{bmatrix} 3+4x & 9 \\ 8 & 2y \end{bmatrix}$$
+                        $$\begin{bmatrix} x+3y & 9 \\ 3x+2 & 6+z \end{bmatrix} = \begin{bmatrix} 3+4x & 9 \\ 8 & 2y \end{bmatrix}$$
+                        <p>Samakan elemen-elemen yang seletak:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Baris 2 kolom 1: $3x + 2 = 8 \implies 3x = 6 \implies x = 2$.</li>
+                            <li>Baris 1 kolom 1: $x + 3y = 3 + 4x \implies 2 + 3y = 3 + 4(2) \implies 2 + 3y = 11 \implies 3y = 9 \implies y = 3$.</li>
+                            <li>Baris 2 kolom 2: $6 + z = 2y \implies 6 + z = 2(3) \implies 6 + z = 6 \implies z = 0$.</li>
+                        </ul>
+                        <p class="font-semibold text-slate-900 pt-1">Jadi, diperoleh nilai $x = 2$, $y = 3$, dan $z = 0$.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm border-t border-slate-800 mt-16">
+        <div class="max-w-5xl mx-auto px-4">
+            <p class="font-medium text-slate-300">Modul Interaktif Matematika SMA • Materi Matriks</p>
+            <p class="text-xs mt-1">Disusun berdasarkan bahan ajar Mengenal Matriks serta Penjumlahan dan Pengurangan Matriks.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interaktivitas & Render KaTeX -->
+    <script>
+        // Render KaTeX saat halaman selesai dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        });
+
+        // 1. Fungsi Pengecekan Soal Warm-Up
+        const warmupExplanations = {
+            1: {
+                true: "Tepat sekali! Baris ke-2 adalah [0, 9, -3] dan kolom ke-3 adalah elemen paling kanan, yaitu -3.",
+                false: "Kurang tepat. Ingat: baris dihitung mendatar dari atas ke bawah (baris ke-2: 0, 9, -3), dan kolom dihitung tegak dari kiri ke kanan (kolom ke-3: 7 dan -3). Pertemuannya adalah -3."
+            },
+            2: {
+                true: "Benar! 4 baris dikali 3 kolom menghasilkan 12 posisi sel data (ordo 4 x 3).",
+                false: "Belum tepat. Untuk mencari total elemen pada susunan persegi panjang, kalikan banyaknya baris dengan banyaknya kolom (4 x 3 = 12)."
+            },
+            3: {
+                true: "Hebat! Dari 2p - 3 = 5 didapat 2p = 8 sehingga p = 4. Substitusikan ke p + 3q = 7 menjadi 4 + 3q = 7, maka 3q = 3 dan q = 1.",
+                false: "Coba hitung perlahan: cari nilai p dulu dari 2p - 3 = 5 (didapat p = 4), lalu masukkan p = 4 ke persamaan p + 3q = 7 sehingga 3q = 3, maka q = 1."
+            },
+            4: {
+                true: "Mantap! -5 + 4 - (-4) = -1 + 4 = 3. Ketelitian tanda negatif sangat penting saat mengurangkan matriks!",
+                false: "Hati-hati dengan tanda negatif ganda! -(-4) berubah menjadi +4. Jadi -5 + 4 + 4 = 3."
+            }
+        };
+
+        function checkWarmup(qNum, choice, isCorrect) {
+            const feedbackEl = document.getElementById(`feedback-${qNum}`);
+            const buttons = document.querySelectorAll(`#options-${qNum} button`);
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'bg-rose-50', 'border-rose-500', 'text-rose-900', 'font-semibold');
+            });
+
+            const clickedIndex = choice.charCodeAt(0) - 65;
+            const selectedBtn = buttons[clickedIndex];
+
+            feedbackEl.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200', 'bg-rose-50', 'text-rose-800', 'border-rose-200');
+
+            if (isCorrect) {
+                selectedBtn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'font-semibold');
+                feedbackEl.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                feedbackEl.innerHTML = `<strong>Benar!</strong> ${warmupExplanations[qNum].true}`;
+            } else {
+                selectedBtn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900', 'font-semibold');
+                feedbackEl.classList.add('bg-rose-50', 'text-rose-800', 'border', 'border-rose-200');
+                feedbackEl.innerHTML = `<strong>Belum Tepat.</strong> ${warmupExplanations[qNum].false}`;
+            }
+        }
+
+        // 2. Fungsi Inspektor Elemen Matriks
+        function showElementInfo(row, col, desc) {
+            const inspector = document.getElementById('element-inspector');
+            inspector.innerHTML = `Elemen <strong>a<sub>${row}${col}</sub></strong> terletak pada <strong>${desc}</strong>.`;
+        }
+
+        // 3. Fungsi Kalkulator Mini Matriks 2x2
+        function calcMatrix() {
+            const a11 = parseFloat(document.getElementById('a11').value) || 0;
+            const a12 = parseFloat(document.getElementById('a12').value) || 0;
+            const a21 = parseFloat(document.getElementById('a21').value) || 0;
+            const a22 = parseFloat(document.getElementById('a22').value) || 0;
+
+            const b11 = parseFloat(document.getElementById('b11').value) || 0;
+            const b12 = parseFloat(document.getElementById('b12').value) || 0;
+            const b21 = parseFloat(document.getElementById('b21').value) || 0;
+            const b22 = parseFloat(document.getElementById('b22').value) || 0;
+
+            const op = document.getElementById('op-select').value;
+            const label = document.getElementById('res-label');
+
+            if (op === '+') {
+                label.textContent = "Hasil A + B";
+                document.getElementById('r11').textContent = a11 + b11;
+                document.getElementById('r12').textContent = a12 + b12;
+                document.getElementById('r21').textContent = a21 + b21;
+                document.getElementById('r22').textContent = a22 + b22;
+            } else {
+                label.textContent = "Hasil A − B";
+                document.getElementById('r11').textContent = a11 - b11;
+                document.getElementById('r12').textContent = a12 - b12;
+                document.getElementById('r21').textContent = a21 - b21;
+                document.getElementById('r22').textContent = a22 - b22;
+            }
+        }
+
+        // 4. Fungsi Toggle Pembahasan Contoh Soal
+        function toggleSolution(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        // 5. Fungsi Switch Tab Contoh Soal
+        function switchExampleTab(tabId) {
+            const tabKonsep = document.getElementById('tab-konsep');
+            const tabOperasi = document.getElementById('tab-operasi');
+            const btnKonsep = document.getElementById('btn-tab-konsep');
+            const btnOperasi = document.getElementById('btn-tab-operasi');
+
+            if (tabId === 'tab-konsep') {
+                tabKonsep.classList.remove('hidden');
+                tabOperasi.classList.add('hidden');
+                btnKonsep.className = "tab-active px-4 py-2 rounded-xl text-sm font-semibold transition";
+                btnOperasi.className = "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-semibold transition";
+            } else {
+                tabOperasi.classList.remove('hidden');
+                tabKonsep.classList.add('hidden');
+                btnOperasi.className = "tab-active px-4 py-2 rounded-xl text-sm font-semibold transition";
+                btnKonsep.className = "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl text-sm font-semibold transition";
+            }
+        }
+    </script>
+</body>
+</html>
